@@ -58,6 +58,7 @@
             <ul id="nav-mobile" class="left">
               <li id="menu-page-one"><a href="#">Page 1</a></li>
               <li id="menu-page-two"><a href="#">Page 2</a></li>
+              <li id="menu-page-three"><a href="#">Page 3</a></li>
             </ul>
           </div>
         </nav>
@@ -114,6 +115,22 @@
       </div>
     </div>
 
+    <div id="page-three">
+      <div class="row">
+        <div class="col s12 m6">
+          <h4>Doggo pic</h4>
+          <div class="col s12 m3">
+              <!--There are basically two ways to make something happen, when you click an HTML element. This is the first...-->
+              <a class="waves-effect waves-light btn-large" onclick="DoggoApi('random?auth=null')">
+                <!--To use google icon font, add a <i> element inside a button link the following way -->
+                <i class="material-icons right">face</i>Public API Random</a>
+            </div>
+        </div>
+      </div>
+      <div id="api-component-Doggo">
+      </div>
+    </div>
+
   </div>
 
 
@@ -163,6 +180,22 @@
     </div>
 </script>
 
+<script id="Doggo" type="text/x-handlebars-template">
+  <div class="row">
+      <div class="col s12 m6">
+        <div class="card blue-grey darken-1">
+          <div class="card-content white-text">
+            <span class="card-title">{{type}}</span>
+            <p>{{activity}}</p>
+          </div>
+          <img src={{message}} />
+          <div class="card-action">
+          </div>
+        </div>
+    </div>
+  </div>
+</script>
+
   <!-- Page functionality - Javascripts
   –––––––––––––––––––––––––––––––––––––––––––––––––– -->
   <script>
@@ -173,6 +206,9 @@
     // Setup handlebars for second API card
     var apiSourceTwo = $("#api-card-template-two").html();
     var apiTemplateTwo = Handlebars.compile(apiSourceTwo);
+
+    var DoggoSource = $("#Doggo").html();
+    var DoggoTemplate = Handlebars.compile(DoggoSource);
 
     //Functions to actually get JSON data from external API's. When .done is called, you receive the data
     function getApiData(someparam) {
@@ -193,9 +229,19 @@
       });
     }
 
+    function DoggoApi() {
+      $.ajax({
+        url: "https://dog.ceo/api/breeds/image/random",
+      }).done(function (data) {
+        console.log(data);
+        $('#api-component-Doggo').html(DoggoTemplate(data));
+      });
+    }
+
     //Handle menu - first show page one no matter what
     getApiData(1)
     $('#page-two').hide();
+    $('#page-three').hide();
 
     //When someone clicks the page one navigation link
     //This is the second way to make something happen, when you click an HTML element
@@ -203,11 +249,18 @@
       getApiData(1)
       $('#page-one').show();
       $('#page-two').hide();
+      $('#page-three').hide();
     });
     //When someone clicks the page two navigation link
     $('#menu-page-two').click(function () {
       $('#page-one').hide();
       $('#page-two').show();
+      $('#page-three').hide();
+    });
+    $('#menu-page-three').click(function () {
+      $('#page-one').hide();
+      $('#page-two').hide();
+      $('#page-three').show();
     });
   </script>
 
